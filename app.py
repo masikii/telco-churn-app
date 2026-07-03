@@ -1,38 +1,15 @@
-"""
-app.py — Telco Customer Churn Prediction (Streamlit)
-====================================================
-Aplikasi prediksi churn pelanggan telco berbasis model Logistic Regression
-(F2-optimized) dengan segmentasi tingkat risiko (Low/Medium/High Risk) untuk
-mendukung prioritisasi Tim Retensi.
-
-Model & konfigurasi identik dengan notebook analisis (Telco_Cust_Churn_Revised_mentoring_2.ipynb):
-    - Preprocessing: RobustScaler + OrdinalEncoder (Contract) + OneHotEncoder (nominal, 7 add-on 3 kategori)
-    - Model: Logistic Regression (C & class_weight hasil GridSearchCV, scoring F2)
-    - Threshold operasional: F2-optimal (sama dengan Bab 6.6 notebook)
-    - Fitur TotalCharges di-drop (redundan dengan tenure)
-
-Menjalankan:
-    streamlit run app.py
-File yang dibutuhkan di folder yang sama:
-    - churn_model.joblib   (dihasilkan oleh train_export.py)
-"""
 import streamlit as st
 import pandas as pd
 import numpy as np
 import joblib
 
-# ----------------------------------------------------------------------
 # Konfigurasi halaman
-# ----------------------------------------------------------------------
 st.set_page_config(
     page_title="Telco Churn Prediction",
     layout="wide",
     initial_sidebar_state="expanded",
 )
-
-# ----------------------------------------------------------------------
 # Styling ringan
-# ----------------------------------------------------------------------
 st.markdown("""
 <style>
     .main-header {font-size: 2.0rem; font-weight: 800; color: #1f2a44; margin-bottom: 0;}
@@ -44,9 +21,7 @@ st.markdown("""
 </style>
 """, unsafe_allow_html=True)
 
-# ----------------------------------------------------------------------
 # Load model artifact (cached)
-# ----------------------------------------------------------------------
 @st.cache_resource
 def load_artifact(path="churn_model.joblib"):
     return joblib.load(path)
@@ -88,17 +63,12 @@ def recommendation(tier):
         "Low Risk": "Tidak perlu aksi retensi proaktif. Cukup dipantau pada scoring bulan berikutnya.",
     }[tier]
 
-
-# ----------------------------------------------------------------------
 # Header
-# ----------------------------------------------------------------------
 st.markdown('<p class="main-header">Telco Customer Churn Prediction</p>', unsafe_allow_html=True)
 st.markdown('<p class="sub-header">Memprediksi risiko churn pelanggan <b>1 bulan ke depan</b> dan memprioritaskan aksi retensi berdasarkan tingkat risiko.</p>', unsafe_allow_html=True)
 st.divider()
 
-# ----------------------------------------------------------------------
 # Sidebar — info model
-# ----------------------------------------------------------------------
 with st.sidebar:
     st.header("Tentang Model")
     st.markdown(f"""
@@ -116,14 +86,10 @@ with st.sidebar:
 """)
     st.caption("Model dan threshold di-tuning (train-only). Alat bantu keputusan retensi, bukan pengganti kebijakan final.")
 
-# ----------------------------------------------------------------------
 # Tabs
-# ----------------------------------------------------------------------
 tab_single, tab_batch = st.tabs(["Prediksi Satu Pelanggan", "Prediksi Massal (CSV)"])
 
-# ======================================================================
 # TAB 1 — Single prediction
-# ======================================================================
 with tab_single:
     st.subheader("Masukkan Data Pelanggan")
 
@@ -202,10 +168,8 @@ with tab_single:
 - Jika pelanggan ini **tidak churn** tetapi tetap diberi promo (False Positive) maka biaya promo sia-sia **sekitar ${FP_DISCOUNT*monthly:,.2f}** (diskon {FP_DISCOUNT:.0%}).
 - Karena biaya False Negative jauh lebih besar dari False Positive, model dan threshold dirancang untuk menekan False Negative (menangkap sebanyak mungkin calon churner).
 """)
-
-# ======================================================================
+            
 # TAB 2 — Batch prediction
-# ======================================================================
 with tab_batch:
     st.subheader("Upload CSV Banyak Pelanggan")
     st.markdown(f"""
@@ -262,6 +226,5 @@ File CSV harus memuat kolom berikut (kolom customerID/TotalCharges boleh ada, ak
                            out_sorted.to_csv(index=False).encode("utf-8"),
                            "hasil_prediksi_churn.csv", "text/csv", type="primary")
 
-# ----------------------------------------------------------------------
 st.divider()
 st.caption("Telco Churn Prediction - Logistic Regression + Risk Tier Segmentation - Horizon prediksi 1 bulan")
