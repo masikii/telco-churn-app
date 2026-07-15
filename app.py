@@ -73,14 +73,14 @@ with st.sidebar:
     st.header("Tentang Model")
     st.markdown(f"""
 - **Algoritma:** Logistic Regression (F2-optimized)
-- **Threshold operasional:** `{THRESHOLD:.2f}` (F2-optimal, sama dengan notebook)
+- **Threshold operasional:** `{THRESHOLD:.2f}`
 - **F2-Score (test):** `{art['test_f2']:.3f}`
 - **ROC-AUC (test):** `{art['test_auc']:.3f}`
 """)
     st.divider()
     st.subheader("Tingkat Risiko")
     st.markdown(f"""
-- **Low Risk** — probabilitas `< {RISK_LOW:.2f}`
+- **Low Risk** — probabilitas `{RISK_LOW:.2f}`
 - **Medium Risk** — `{RISK_LOW:.2f} sampai {RISK_HIGH:.2f}`
 - **High Risk** — probabilitas `>= {RISK_HIGH:.2f}`
 """)
