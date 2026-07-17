@@ -1,5 +1,8 @@
-streamlit
-pandas
-numpy
-scikit-learn==1.9.0
-joblib
+# scikit-learn dikunci: churn_artifact.joblib di-pickle dengan versi ini.
+# Kalau versinya beda, app otomatis melatih ulang dari CSV (butuh CSV di repo).
+scikit-learn==1.8.0
+streamlit==1.59.2
+pandas>=2.0
+numpy>=1.26
+matplotlib>=3.8
+joblib>=1.3
